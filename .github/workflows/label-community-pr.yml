@@ -2,7 +2,7 @@ name: Label community PRs
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '*/1 * * * *'
 
 permissions:
   actions: write
