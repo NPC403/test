@@ -27,3 +27,4 @@ jobs:
               gh pr edit $id --add-label "bug"
             #fi
           done
+
