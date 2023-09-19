@@ -4,8 +4,7 @@ on:
   schedule:
     - cron: '*/1 * * * *'
 
-permissions:
-  actions: write
+permissions: write-all
 
 jobs:
   check_author:
