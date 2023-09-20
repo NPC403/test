@@ -14,9 +14,9 @@ jobs:
 
     steps:
       - name: Add Label if Author is not a member
-        uses: christianvuerings/add-labels@v1
-        with:
-          labels: |
-            bug
+        uses: actions/checkout@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          gh pr edit ${{ github.event.pull_request.html_url }} --add-label "bug"
