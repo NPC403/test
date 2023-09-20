@@ -16,14 +16,18 @@ jobs:
       - name: Check PR Author Membership
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABEL: "bug"
         run: |
           set +e
           for id in `gh pr list -S 'draft:false' -s 'open'|awk '{print $1}'`
           do
+            gh pr view 2 --json labels -q ".labels.[].name"|grep '^${{ env.LABEL }}$'
+            if [ $? -ne 0 ]; then
             #name=`gh pr view $id --json author -q '.author.login'`
             #gh api orgs/Kong/members --paginate -q '.[].login'|grep -q "^${name}$"
             #if [ $? -ne 0 ]; then
               #gh pr edit $id --add-label "author/community"
-              gh pr edit $id --add-label "bug"
+              gh pr edit $id --add-label "${{ env.LABEL }}"
             #fi
+            fi
           done
