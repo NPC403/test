@@ -1,15 +1,21 @@
-name: test
+name: Label community PRs
 
 on:
-  schedule:
-    - cron: '*/1 * * * *'
+  pull_request:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
 
 jobs:
   check_author:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Check PR Author Membership
+      - name: Add Label if Author is not a member
+        uses: actions/checkout@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo ${{ github.actor }}
+          set +e
+          echo 'aaa'
