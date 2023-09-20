@@ -1,10 +1,11 @@
 name: Label community PRs
 
 on:
-  schedule:
-    - cron: '*/1 * * * *'
+  pull_request:
+    types:
+      - opened
 
-permissions: 
+permissions:
   pull-requests: write
 
 jobs:
@@ -12,22 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Check PR Author Membership
+      - name: Add Label if Author is not a member
+        uses: christianvuerings/add-labels@v1
+        with:
+          labels: |
+            bug
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL: "bug"
-        run: |
-          set +e
-          for id in `gh pr list -S 'draft:false' -s 'open'|awk '{print $1}'`
-          do
-            gh pr view 2 --json labels -q ".labels.[].name"|grep '^${{ env.LABEL }}$'
-            if [ $? -ne 0 ]; then
-            #name=`gh pr view $id --json author -q '.author.login'`
-            #gh api orgs/Kong/members --paginate -q '.[].login'|grep -q "^${name}$"
-            #if [ $? -ne 0 ]; then
-              #gh pr edit $id --add-label "author/community"
-              gh pr edit $id --add-label "${{ env.LABEL }}"
-            #fi
-            fi
-          done
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
